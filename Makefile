@@ -1,11 +1,11 @@
 NAME = computor
 CC = g++
-CFLAGS = -Wall -Wextra -Werror -std=c++14 -O2
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2
 SRCDIR = src
 OBJDIR = obj
 DEPS = inc/
 INC = -I inc
-SRC = main.cpp
+SRC = main.cpp Lexer.cpp Parser.cpp
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 
 RED = "\033[0;31m"
@@ -33,11 +33,14 @@ fclean: clean
 
 re: fclean all
 
+test: all gen_test_cases
+	./test/run.sh $(NAME) test/expressions.in test/expressions.out
+
 gen_test_cases:
 	python3 test/expr_generator.py
 
-test: all
-	./test/run.sh $(NAME) test/expressions.in test/expressions.out
+clean_test:
+	@rm -f test/expressions.in test/expressions.out
 
 .PHONY: all clean fclean re test
 

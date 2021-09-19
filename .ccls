@@ -1,5 +1,7 @@
 %clang++
-%cpp -std=c++14
+%cpp -std=c++17
+%hpp -std=c++17
+-Iinc
 -isystem
 /usr/local/include
 -isystem
