@@ -1,0 +1,188 @@
+BEGIN
+Number 11
+Mul 6.95312e-310
+Unknown 0
+Sub 6.95312e-310
+Number 79
+Mul 6.95312e-310
+Unknown 2
+Add 6.95312e-310
+Number 79
+Mul 6.95312e-310
+Unknown 1
+Assign 6.95312e-310
+Number 85
+Mul 6.95312e-310
+Unknown 2
+Add 6.95312e-310
+Number 12
+Mul 6.95312e-310
+Unknown 2
+END
+
+BEGIN
+Number 71
+Mul 6.95312e-310
+Unknown 2
+Assign 6.95312e-310
+Number 5
+Mul 6.95312e-310
+Unknown 0
+Add 6.95312e-310
+Number 42
+Mul 6.95312e-310
+Unknown 1
+Add 6.95312e-310
+Number 96
+Mul 6.95312e-310
+Unknown 0
+END
+
+BEGIN
+Number 4
+Mul 6.95313e-310
+Unknown 1
+Sub 6.95313e-310
+Number 24
+Mul 6.95313e-310
+Unknown 1
+Assign 6.95313e-310
+Number 81
+Mul 6.95313e-310
+Unknown 0
+END
+
+BEGIN
+Number 84
+Mul 6.95312e-310
+Unknown 2
+Add 6.95312e-310
+Number 93
+Mul 6.95312e-310
+Unknown 2
+Sub 6.95312e-310
+Number 46
+Mul 6.95312e-310
+Unknown 0
+Assign 6.95312e-310
+Number 74
+Mul 6.95312e-310
+Unknown 0
+END
+
+BEGIN
+Number 45
+Mul 6.95313e-310
+Unknown 0
+Add 6.95313e-310
+Number 56
+Mul 6.95313e-310
+Unknown 1
+Add 6.95313e-310
+Number 56
+Mul 6.95313e-310
+Unknown 0
+Assign 6.95313e-310
+Number 50
+Mul 6.95313e-310
+Unknown 1
+Add 6.95313e-310
+Number 89
+Mul 6.95313e-310
+Unknown 2
+END
+
+BEGIN
+Number 3
+Mul 6.95312e-310
+Unknown 2
+Assign 6.95312e-310
+Number 61
+Mul 6.95312e-310
+Unknown 1
+Add 6.95312e-310
+Number 55
+Mul 6.95312e-310
+Unknown 0
+Add 6.95312e-310
+Number 89
+Mul 6.95312e-310
+Unknown 1
+END
+
+BEGIN
+Number 64
+Mul 6.95312e-310
+Unknown 2
+Assign 6.95312e-310
+Number 49
+Mul 6.95312e-310
+Unknown 1
+END
+
+BEGIN
+Number 23
+Mul 6.95312e-310
+Unknown 0
+Add 6.95312e-310
+Number 55
+Mul 6.95312e-310
+Unknown 0
+Add 6.95312e-310
+Number 63
+Mul 6.95312e-310
+Unknown 2
+Assign 6.95312e-310
+Number 62
+Mul 6.95312e-310
+Unknown 0
+Sub 6.95312e-310
+Number 19
+Mul 6.95312e-310
+Unknown 1
+Add 6.95312e-310
+Number 94
+Mul 6.95312e-310
+Unknown 1
+END
+
+BEGIN
+Number 40
+Mul 6.95312e-310
+Unknown 0
+Sub 6.95312e-310
+Number 22
+Mul 6.95312e-310
+Unknown 1
+Assign 6.95312e-310
+Number 88
+Mul 6.95312e-310
+Unknown 1
+Add 6.95312e-310
+Number 0
+Mul 6.95312e-310
+Unknown 1
+Add 6.95312e-310
+Number 44
+Mul 6.95312e-310
+Unknown 2
+END
+
+BEGIN
+Number 26
+Mul 6.95312e-310
+Unknown 0
+Sub 6.95312e-310
+Number 94
+Mul 6.95312e-310
+Unknown 2
+Assign 6.95312e-310
+Number 19
+Mul 6.95312e-310
+Unknown 2
+Add 6.95312e-310
+Number 53
+Mul 6.95312e-310
+Unknown 1
+END
+

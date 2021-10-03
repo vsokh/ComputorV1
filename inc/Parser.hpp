@@ -4,10 +4,15 @@
 
 namespace Translator
 {
-class ParseTree {};
+
+class ParseTree
+{
+
+};
+
 class Parser {
 	public:
-		Parser(const Lexer& lexer);
+		Parser(const std::string& sexpr);
 		ParseTree parse();
 
 	private:

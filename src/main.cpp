@@ -26,8 +26,8 @@ class ExpressionTranslator
 	public:
 		Expression translate(const std::string& sexpr)
 		{
-			Lexer lexer(sexpr);
-			Parser parser(lexer);
+			Parser parser(sexpr);
+
 			const auto& parseTree = parser.parse();
 			(void)parseTree;
 			return {};
