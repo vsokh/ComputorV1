@@ -55,15 +55,15 @@ Token Lexer::identifyToken(const std::string& lexeme, const Rules& rules)
     double coef = 1.0;
     std::regex pattern;
     std::optional<Token> token;
-    for (const auto& rule : rules)
+    for (const auto& [patternString, tokenKind]: rules)
     {
-        pattern = rule.first;
+        pattern = patternString;
         if (!std::regex_match(lexeme, pattern))
             continue;
 
-        TokenKind kind = rule.second;
+        TokenKind kind = tokenKind;
         double value = 0.0;
-        switch (rule.second)
+        switch (kind)
         {
             case TokenKind::Number:
             case TokenKind::Fraction:
@@ -80,6 +80,7 @@ Token Lexer::identifyToken(const std::string& lexeme, const Rules& rules)
             case TokenKind::Unknown:
             {
                 value = std::stod(split(lexeme, "^")[1]);
+                break;
             }
             case TokenKind::Add:
             case TokenKind::End:
