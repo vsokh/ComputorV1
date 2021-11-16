@@ -6,20 +6,6 @@
 
 using namespace Translator;
 
-namespace
-{
-bool isOperation(const Token& token)
-{
-    static const std::unordered_set<TokenKind> ops =
-    {
-        TokenKind::Add,
-        TokenKind::Sub
-    };
-
-    return ops.find(token.kind) != ops.end();
-};
-}
-
 Token Parser::nextToken()
 {
     return _lexer.nextToken();
@@ -59,7 +45,12 @@ void Parser::parseExpression(Tokens& tokens, Expression& expression, bool toNega
 {
     while (!tokens.empty())
     {
-        const auto& op = find_if(tokens.begin(), tokens.end(), isOperation);
+        const auto& op = find_if(tokens.begin(), tokens.end(),
+                [](const Token& token)
+                {
+                    return token.kind == TokenKind::Add ||
+                           token.kind == TokenKind::Sub;
+                });
         auto term = parseTerm(tokens.begin(), op);
         if (toNegate)
         {

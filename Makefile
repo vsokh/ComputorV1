@@ -1,6 +1,6 @@
 NAME = computor
 CC = g++
-CFLAGS = -Wall -Wextra -Werror -std=c++17 -g
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2
 SRCDIR = src
 OBJDIR = obj
 DEPS = inc/Expression.hpp inc/Lexer.hpp inc/Parser.hpp inc/Term.hpp inc/TokenDefs.hpp
