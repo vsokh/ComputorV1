@@ -1,9 +1,9 @@
 NAME = computor
 CC = g++
-CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -g
 SRCDIR = src
 OBJDIR = obj
-DEPS = inc/
+DEPS = inc/Expression.hpp inc/Lexer.hpp inc/Parser.hpp inc/Term.hpp inc/TokenDefs.hpp
 INC = -I inc
 SRC = main.cpp Lexer.cpp Parser.cpp
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))

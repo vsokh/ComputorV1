@@ -1,6 +1,7 @@
 #pragma once
 struct Term
 {
-    double coef; int exp; bool isX;
+    double coef;
+    double exp;
     Term() = default;
 };

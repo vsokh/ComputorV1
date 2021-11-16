@@ -17,7 +17,7 @@ private:
     Token nextToken();
     Tokens parseLHS();
     Tokens parseRHS();
-    void parseExpression(const Tokens& tokens, Expression& expression);
+    void parseExpression(Tokens& tokens, Expression& expression, bool toNegate);
 
     template<typename Iterator>
     Term parseTerm(Iterator start, Iterator end) const
@@ -34,12 +34,12 @@ private:
                 case TokenKind::Fraction:
                 {
                     result.coef = val;
+                    result.exp = 0;
                     break;
                 }
                 case TokenKind::Unknown:
                 {
                     result.exp = val;
-                    result.isX = true;
                     break;
                 }
 

@@ -30,6 +30,7 @@ int main(int argc, char **argv)
 	try
 	{
 		Computor c(argv[1]);
+
 	}
 	catch (const std::exception& e)
 	{

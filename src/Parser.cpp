@@ -55,15 +55,22 @@ Tokens Parser::parseRHS()
     return result;
 }
 
-void Parser::parseExpression(const Tokens& tokens, Expression& expression)
+void Parser::parseExpression(Tokens& tokens, Expression& expression, bool toNegate)
 {
-    Tokens tmp = tokens;
-    while (!tmp.empty())
+    while (!tokens.empty())
     {
-        const auto& op = find_if(tmp.begin(), tmp.end(), isOperation);
-        const auto& term = parseTerm(tmp.begin(), op);
+        const auto& op = find_if(tokens.begin(), tokens.end(), isOperation);
+        auto term = parseTerm(tokens.begin(), op);
+        if (toNegate)
+        {
+            term.coef = -term.coef;
+        }
         expression.update(term);
-        tmp.erase(op+1);
+
+        if (op == tokens.end())
+            tokens.clear();
+        else
+            tokens.erase(op);
     }
 }
 
@@ -75,10 +82,11 @@ Parser::Parser(const std::string& sexpr)
 Expression Parser::parse()
 {
     Expression expression;
-    const auto& lhs = parseLHS();
-    parseExpression(lhs, expression);
+    auto lhs = parseLHS();
+    parseExpression(lhs, expression, false);
 
-    const auto& rhs = parseRHS();
-    parseExpression(rhs, expression);
+    auto rhs = parseRHS();
+    parseExpression(rhs, expression, true);
     return expression;
 }
+

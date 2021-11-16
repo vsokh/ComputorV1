@@ -1,4 +1,3 @@
-computor
-*.[oa]
-.ccls
-.idea/
+*
+!inc/*.hpp
+!src/*.cpp
