@@ -1,6 +1,6 @@
 NAME = computor
 CC = g++
-CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
 SRCDIR = src
 OBJDIR = obj
 DEPS = inc/

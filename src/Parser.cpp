@@ -1,42 +1,84 @@
 #include "Parser.hpp"
-#include <iostream>
-#include <stack>
+#include "TokenDefs.hpp"
+
+#include <optional>
+#include <unordered_set>
 
 using namespace Translator;
 
+namespace
+{
+bool isOperation(const Token& token)
+{
+    static const std::unordered_set<TokenKind> ops =
+    {
+        TokenKind::Add,
+        TokenKind::Sub
+    };
+
+    return ops.find(token.kind) != ops.end();
+};
+}
+
+Token Parser::nextToken()
+{
+    return _lexer.nextToken();
+}
+
+Tokens Parser::parseLHS()
+{
+    Tokens result;
+    auto token = nextToken();
+    while (token.kind != TokenKind::Assign && token.kind != TokenKind::End)
+    {
+        result.push_back(token);
+        token = nextToken();
+    }
+    if (token.kind == TokenKind::End || result.empty())
+        throw std::logic_error("Incomplete expression!");
+
+    return result;
+}
+
+Tokens Parser::parseRHS()
+{
+    Tokens result;
+    auto token = nextToken();
+    while (token.kind != TokenKind::End)
+    {
+        result.push_back(token);
+        token = nextToken();
+    }
+    if (result.empty())
+        throw std::logic_error("Incomplete expression!");
+
+    return result;
+}
+
+void Parser::parseExpression(const Tokens& tokens, Expression& expression)
+{
+    Tokens tmp = tokens;
+    while (!tmp.empty())
+    {
+        const auto& op = find_if(tmp.begin(), tmp.end(), isOperation);
+        const auto& term = parseTerm(tmp.begin(), op);
+        expression.update(term);
+        tmp.erase(op+1);
+    }
+}
+
 Parser::Parser(const std::string& sexpr)
-	: _lexer(Lexer(sexpr))
+    : _lexer(Lexer(sexpr))
 {
 }
 
-ParseTree Parser::parse()
+Expression Parser::parse()
 {
-	std::cout << "BEGIN\n";
+    Expression expression;
+    const auto& lhs = parseLHS();
+    parseExpression(lhs, expression);
 
-	ParseTree tree;
-	/* stack of tokens - current state */
-	/* current token */
-	/* 5 * X^0 + 2 = 0 */
-	/**
-	 Grammar:
-		Number: * | + | - | =
-		X: * | + | - | =
-		*: Number | X
-		+: Number | X
-		-: Number | X
-		=: Number | X
-	**/
-
-	/*
-	 */
-	std::stack<Token> stack;
-	while (const auto& currTkn = _lexer.nextToken())
-	{
-		const auto& prevTkn = stack.top();
-
-		std::cout << token << std::endl;
-	}
-
-	std::cout << "END\n\n";
-	return {};
+    const auto& rhs = parseRHS();
+    parseExpression(rhs, expression);
+    return expression;
 }

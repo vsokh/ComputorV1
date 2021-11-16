@@ -1,66 +1,22 @@
 #include <iostream>
 #include <exception>
-#include <vector>
 
-#include "Lexer.hpp"
 #include "Parser.hpp"
+#include "Expression.hpp"
+#include "Term.hpp"
 
 using namespace Translator;
 
-class Expression
-{
-	public:
-		Expression() = default;
-		Expression(const Tokens& tokens)
-			: _tokens(tokens)
-		{}
-
-	private:
-		Tokens _tokens;
-};
-
-class Solution {};
-
-class ExpressionTranslator
-{
-	public:
-		Expression translate(const std::string& sexpr)
-		{
-			Parser parser(sexpr);
-
-			const auto& parseTree = parser.parse();
-			(void)parseTree;
-			return {};
-		}
-};
-
 class Computor
 {
-	public:
-		Computor(const std::string& expression)
-			: _expr(ExpressionTranslator{}.translate(expression))
-		{
-		}
+public:
+    Computor(const std::string& expression)
+        : _expr(Parser{expression}.parse())
+    {
+    }
 
-		Solution compute()
-		{
-			return Solution{};
-		}
-
-	private:
-		Expression _expr;
-};
-
-class Presenter
-{
-	public:
-		Presenter(const Solution& sol)
-		{
-			(void)sol;
-		}
-		void present()
-		{
-		}
+private:
+    Expression _expr;
 };
 
 int main(int argc, char **argv)
@@ -74,10 +30,6 @@ int main(int argc, char **argv)
 	try
 	{
 		Computor c(argv[1]);
-		const auto& solution = c.compute();
-
-		Presenter p(solution);
-		p.present();
 	}
 	catch (const std::exception& e)
 	{
@@ -85,3 +37,4 @@ int main(int argc, char **argv)
 	}
 	return 0;
 }
+
