@@ -38,5 +38,4 @@ class Lexer
         std::string _delim;
 };
 } // Translator
-std::ostream& operator<<(std::ostream &o, const Translator::TokenKind& token);
 std::ostream& operator<<(std::ostream &o, const Translator::TokenOpt& token);

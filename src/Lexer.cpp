@@ -95,26 +95,9 @@ Token Lexer::identifyToken(const std::string& lexeme, const Rules& rules)
     return *token;
 }
 
-std::ostream& operator<<(std::ostream &o, const TokenKind& token)
-{
-    std::unordered_map<TokenKind, std::string> um =
-    {
-        {TokenKind::Number, "Number"},
-        {TokenKind::Add, "Add"},
-        {TokenKind::Sub, "Sub"},
-        {TokenKind::Mul, "Mul"},
-        {TokenKind::Assign, "Assign"},
-        {TokenKind::Unknown, "Unknown"},
-        {TokenKind::Fraction, "Fraction"},
-        {TokenKind::End, "End"},
-    };
-    o << um[token];
-    return o;
-}
-
 std::ostream& operator<<(std::ostream &o, const TokenOpt& token)
 {
     if (token)
-        o << token->kind << " " << token->value;
+        o << token->toStr() << " " << token->value;
     return o;
 }

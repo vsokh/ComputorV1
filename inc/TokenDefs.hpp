@@ -25,7 +25,6 @@ struct Token
 	TokenKind kind;
 	double value;
 
-
     std::string toStr() const
     {
         std::unordered_map<TokenKind, std::string> um =
