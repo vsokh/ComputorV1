@@ -187,9 +187,21 @@ public:
 
 Token NumberTokenExtractor::extract(StringIt& it, StringConstIt end)
 {
-    (void)it;
-    (void)end;
-    return {TokenKind::Num, std::nullopt};
+    auto beg = it;
+    while (it != end && '0' <= *it && *it <= '9')
+    {
+        ++it;
+    }
+    if (it == end || *it != '.')
+    {
+        return {TokenKind::Num, std::stod(std::string{beg, it})};
+    }
+    ++it;
+    while (it != end && '0' <= *it && *it <= '9')
+    {
+        ++it;
+    }
+    return {TokenKind::Num, std::stod(std::string{beg, it})};
 }
 
 std::unique_ptr<TokenExtractor>
@@ -227,7 +239,6 @@ Token Lexer::getNextToken()
         }
     }
     return {TokenKind::End, std::nullopt};
-
 }
 
 int main(int argc, char **argv)
@@ -235,7 +246,7 @@ int main(int argc, char **argv)
     (void)argc;
     (void)argv;
 
-    auto lexer = Lexer{"X^0 + -*=X^2"};
+    auto lexer = Lexer{"X^0 + -*=X^2 + 5.0"};
     try
     {
         for (auto token = lexer.getNextToken();
