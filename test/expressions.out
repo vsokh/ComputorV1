@@ -1,10 +1,48 @@
-27 * X^10 - 78 * X^6 - 7 * X^15 = 98 * X^19
-83 * X^2 + 55 * X^16 = 73 * X^14
-100 * X^10 = 68 * X^1 + 77 * X^18 + 61 * X^0
-19 * X^1 + 11 * X^14 = 10 * X^1
-19 * X^7 + 80 * X^6 = 92 * X^16 + 34 * X^7 + 93 * X^16
-74 * X^0 + 44 * X^15 - 41 * X^16 = 66 * X^18 + 81 * X^4 - 18 * X^5
-25 * X^17 = 22 * X^19 + 66 * X^5
-33 * X^18 = 72 * X^19 - 57 * X^10 - 53 * X^9
-97 * X^0 + 64 * X^15 + 64 * X^15 = 77 * X^2 - 1 * X^3
-99 * X^18 - 99 * X^18 = 80 * X^16 - 80 * X^5 + 55 * X^8
+Num: 91
+Mul
+Wrong unknown term
+
+Num: 31
+Mul
+Unknown
+Add
+Num: 45
+Mul
+Wrong unknown term
+
+Num: 76
+Mul
+Wrong unknown term
+
+Num: 26
+Mul
+Wrong unknown term
+
+Num: 80
+Mul
+Wrong unknown term
+
+Num: 89
+Mul
+Wrong unknown term
+
+Num: 34
+Mul
+Unknown
+Add
+Num: 62
+Mul
+Wrong unknown term
+
+Num: 80
+Mul
+Wrong unknown term
+
+Num: 53
+Mul
+Wrong unknown term
+
+Num: 53
+Mul
+Wrong unknown term
+

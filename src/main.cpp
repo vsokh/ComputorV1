@@ -147,7 +147,8 @@ Token UnknownTokenExtractor::extract(StringIt& it, StringConstIt end)
     {
         throw std::logic_error("Wrong unknown term");
     }
-    if (*it < '0' || '2' < *it )
+    while (*it < '0' || '2' < *it ||
+          ((it + 1) != end && *(it + 1) >= '0' && *(it + 1) <= '9'))
     {
         throw std::logic_error("Wrong unknown term");
     }
@@ -245,8 +246,12 @@ int main(int argc, char **argv)
 {
     (void)argc;
     (void)argv;
+    /* if (argc <= 1) */
+    /* { */
+    /*     return 1; */
+    /* } */
 
-    auto lexer = Lexer{"X^0 + -*=X^2 + 5.0"};
+    auto lexer = Lexer{"9 * X^0 - 21 * X^2 + 16 * X^1 = 86 * X^1 + 49 * X^0"};
     try
     {
         for (auto token = lexer.getNextToken();
@@ -260,5 +265,6 @@ int main(int argc, char **argv)
     {
         std::cout << e.what() << std::endl;
     }
+    std::cout << std::endl;
     return 0;
 }
