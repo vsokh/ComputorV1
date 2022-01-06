@@ -3,7 +3,7 @@ import random, sys
 def createTerm(bigNumbers):
     minmax = (-sys.maxsize-1, sys.maxsize) if bigNumbers else (-100, 100)
     coef = random.randint(minmax[0], minmax[1])
-    power = random.randint(0, 2)
+    power = random.randint(0, 20)
     term = "%s * X^%s"
     return (term % (coef*(-1) if coef < 0 else coef, power), coef < 0)
 
