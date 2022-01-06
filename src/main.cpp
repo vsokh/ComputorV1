@@ -1,6 +1,8 @@
 #include <string>
 #include <iostream>
 
+#include <stdexcept>
+
 #include <variant>
 #include <optional>
 
@@ -43,8 +45,13 @@ std::ostream& operator<<(std::ostream &o, const Token& rhs)
             {TokenKind::End, "End"}
     };
 
-    const auto& tokenToString = tokenToStringMap.find(rhs.kind)->second;
-    o << tokenToString;
+    const auto& tokenKindToString = tokenToStringMap.find(rhs.kind)->second;
+    o << tokenKindToString;
+    if (rhs.value.has_value())
+    {
+        o << ": " << rhs.value.value();
+    }
+
     return o;
 }
 
@@ -68,32 +75,29 @@ bool Token::operator!=(const Token& rhs) const
     return !(*this == rhs);
 }
 
+using StringConstIt = typename std::string::const_iterator;
+using StringIt = typename std::string::iterator;
+
 class Lexer {
 public:
     explicit Lexer(const std::string& str);
     Token getNextToken();
 
 private:
-    using StringConstIt = typename std::string::const_iterator;
-
-    static TokenValue retrieveTokenValue(const TokenKind& kind,
-                                         StringConstIt leftIt,
-                                         StringConstIt rightIt,
-                                         StringConstIt endIt);
 
     static std::string removeWhiteSpaces(std::string str);
 
 private:
     std::string _str;
 
-    StringConstIt _posLeft;
-    StringConstIt _posRight;
+    StringIt _it;
+    StringConstIt _end;
 };
 
 Lexer::Lexer(const std::string& str)
     : _str{removeWhiteSpaces(str)}
-    , _posLeft{_str.begin()}
-    , _posRight{_str.begin()}
+    , _it{_str.begin()}
+    , _end{_str.end()}
 {}
 
 std::string Lexer::removeWhiteSpaces(std::string str)
@@ -117,116 +121,133 @@ std::string Lexer::removeWhiteSpaces(std::string str)
     return str;
 }
 
-TokenValue Lexer::retrieveTokenValue(const TokenKind& kind,
-                                     StringConstIt leftIt,
-                                     StringConstIt rightIt,
-                                     StringConstIt endIt)
+class TokenExtractor
 {
+public:
+    virtual Token extract(StringIt& it, StringConstIt end) = 0;
+    virtual ~TokenExtractor() = default;
+};
 
-    if (static const std::vector<TokenKind> noValueTokens = {
-                TokenKind::Add,
-                TokenKind::Sub,
-                TokenKind::Mul,
-                TokenKind::Equality,
-                TokenKind::End,
-        }; std::find(noValueTokens.begin(),
-                  noValueTokens.end(), kind) != noValueTokens.end())
+class UnknownTokenExtractor : public TokenExtractor
+{
+public:
+    virtual Token extract(StringIt& it, StringConstIt end) override;
+};
+
+Token UnknownTokenExtractor::extract(StringIt& it, StringConstIt end)
+{
+    static const std::string str = "X^";
+    auto strIt = str.begin();
+    while (it != end && strIt != str.end() && *it == *strIt)
     {
-        return std::nullopt;
+        ++it;
+        ++strIt;
+    }
+    if (it == end || strIt != str.end())
+    {
+        throw std::logic_error("Wrong unknown term");
+    }
+    if (*it < '0' || '2' < *it )
+    {
+        throw std::logic_error("Wrong unknown term");
     }
 
-    if (kind == TokenKind::Unknown)
+    ++it;
+    return {TokenKind::Unknown, std::nullopt};
+}
+
+class OperationTokenExtractor : public TokenExtractor
+{
+public:
+    Token extract(StringIt& it, StringConstIt end) override;
+};
+
+Token OperationTokenExtractor::extract(StringIt& it, StringConstIt end)
+{
+    if (it == end)
     {
-        while (leftIt != rightIt &&
-               leftIt != endIt &&
-               (*leftIt < '0' || '9' < *leftIt))
-        {
-            ++leftIt;
-        }
+        throw std::logic_error("Wrong operation term");
     }
 
-    return std::stod(std::string{leftIt, rightIt});
+    static const std::unordered_map<char, Token>
+        charToTokenMap = {
+            {'+', {TokenKind::Add, std::nullopt}},
+            {'-', {TokenKind::Sub, std::nullopt}},
+            {'*', {TokenKind::Mul, std::nullopt}},
+            {'=', {TokenKind::Equality, std::nullopt}},
+    };
+    return charToTokenMap.find(*it++)->second;
+}
+
+class NumberTokenExtractor : public TokenExtractor
+{
+public:
+    Token extract(StringIt& it, StringConstIt end) override;
+};
+
+Token NumberTokenExtractor::extract(StringIt& it, StringConstIt end)
+{
+    (void)it;
+    (void)end;
+    return {TokenKind::Num, std::nullopt};
+}
+
+std::unique_ptr<TokenExtractor>
+    createTokenExtractor(char ch)
+{
+    std::unique_ptr<TokenExtractor> extractor{nullptr};
+
+    if (ch == 'X')
+    {
+        extractor.reset(new UnknownTokenExtractor{});
+    }
+    else if (ch == '=' || ch == '-' || ch == '*' || ch == '+')
+    {
+        extractor.reset(new OperationTokenExtractor{});
+    }
+    else if ('0' <= ch && ch <= '9')
+    {
+        extractor.reset(new NumberTokenExtractor{});
+    }
+
+    return extractor;
 }
 
 Token Lexer::getNextToken()
 {
-    static const std::unordered_map<std::string, TokenKind>
-        lexemeToTokenMap =
+    while (_it != _end)
     {
-            {"\\+", TokenKind::Add},
-            {"-", TokenKind::Sub},
-            {"\\*", TokenKind::Mul},
-            {"X\\^[0-2]", TokenKind::Unknown},
-            {"=", TokenKind::Equality},
-            {"[0-9]+(?!\\.)", TokenKind::Num}, // TODO: Fix leading zeros
-            {"[0-9]+\\.[0-9]+", TokenKind::Num}, // TODO: Fix leading zeros
-    };
-
-    // TODO: refactor
-    auto isToken = [&lexemeToTokenMap](StringConstIt leftIt, StringConstIt rightIt)
-    {
-        return std::any_of(lexemeToTokenMap.begin(),
-                           lexemeToTokenMap.end(),
-                           [&leftIt, &rightIt](const std::pair<std::string, TokenKind>& pair)
-                           {
-                                return std::regex_match(leftIt, rightIt, std::regex{pair.first});
-                           });
-    };
-
-    while (_posLeft != _str.end())
-    {
-        for (const auto& [lexeme, tokenKind] : lexemeToTokenMap)
+        if (auto extractor = createTokenExtractor(*_it))
         {
-            if (std::regex_match(_posLeft,
-                                 _posRight,
-                                 std::regex{lexeme}))
-            {
-                // TODO: refactor
-                // If we in the context of a number and
-                // the next character is neither a token nor the end of the string,
-                // we continue the match.
-                // This helps us to distinguish between whole and fractionl tokens.
-                if (tokenKind == TokenKind::Num &&
-                    _posRight != _str.end() &&
-                    !isToken(_posRight,
-                             _posRight + 1))
-                {
-                    break;
-                }
-
-                auto posLeft = _posLeft;
-                auto posRight = _posRight;
-                _posLeft = _posRight;
-
-                if (_posRight != _str.end())
-                {
-                    ++_posRight;
-                }
-
-                return
-                {
-                    tokenKind,
-                    retrieveTokenValue(tokenKind, posLeft, posRight, _str.end())
-                };
-            }
+            return extractor->extract(_it, _end);
         }
-        ++_posRight;
+        else
+        {
+            throw std::logic_error{"Unrecognized term"};
+        }
     }
     return {TokenKind::End, std::nullopt};
+
 }
 
-int main()
+int main(int argc, char **argv)
 {
-    auto lexer = Lexer{"5.0 + 5 = 5.0 + 5"};
-// TODO: make range-based loop
-//    for (const auto& tokenIt : lexer.tokens())
-//    {
-//        std::cout << *tokenIt << std::endl;
-//    }
-    for (auto token = lexer.getNextToken();
-         token != TokenKind::End; token = lexer.getNextToken())
+    (void)argc;
+    (void)argv;
+
+    auto lexer = Lexer{"X^0 + -*=X^2"};
+    try
     {
-        std::cout << token << std::endl;
+        for (auto token = lexer.getNextToken();
+             token != TokenKind::End;
+             token = lexer.getNextToken())
+        {
+            std::cout << token << std::endl;
+        }
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
     }
     return 0;
 }

@@ -1,4 +1,5 @@
-import random, sys
+import random
+import sys
 
 def createTerm(bigNumbers):
     minmax = (-sys.maxsize-1, sys.maxsize) if bigNumbers else (-100, 100)
