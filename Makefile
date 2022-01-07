@@ -3,9 +3,24 @@ CC = g++
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -O0 -g
 SRCDIR = src
 OBJDIR = obj
-# DEPS = inc/Expression.hpp inc/Lexer.hpp inc/Parser.hpp inc/Term.hpp inc/TokenDefs.hpp
+TESTDIR = test
+
+DEPS = inc/Lexer.h \
+	   inc/Token.h \
+	   inc/TokenExtractor.h \
+	   inc/UnknownTokenExtractor.h \
+	   inc/OperationTokenExtractor.h \
+	   inc/NumberTokenExtractor.h
+
 INC = -I inc
-SRC = main.cpp
+SRC = main.cpp \
+	  Lexer.cpp \
+	  Token.cpp \
+	  TokenExtractor.cpp \
+	  UnknownTokenExtractor.cpp \
+	  OperationTokenExtractor.cpp \
+	  NumberTokenExtractor.cpp
+
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 
 RED = "\033[0;31m"
@@ -34,13 +49,13 @@ fclean: clean
 re: fclean all
 
 test: all gen_test_cases
-	./test/run.sh $(NAME) test/expressions.in test/expressions.out
+	./$(TESTDIR)/run.sh $(NAME) $(TESTDIR)/expressions.in $(TESTDIR)/expressions.out
 
 gen_test_cases:
-	python3 test/expr_generator.py
+	python3 $(TESTDIR)/expr_generator.py $(TESTDIR)/expressions.in
 
 clean_test:
-	@rm -f test/expressions.in test/expressions.out
+	@rm -f $(TESTDIR)/expressions.in $(TESTDIR)/expressions.out
 
 .PHONY: all clean fclean re test
 

@@ -1,42 +1,63 @@
 import random
 import sys
 
-def createTerm(bigNumbers):
-    minmax = (-sys.maxsize-1, sys.maxsize) if bigNumbers else (-100, 100)
-    coef = random.randint(minmax[0], minmax[1])
-    power = random.randint(0, 20)
-    term = "%s * X^%s"
-    return (term % (coef*(-1) if coef < 0 else coef, power), coef < 0)
+class TermCreator:
+    def __init__(self, coefLimit=100, powerLimit=2):
+        self._coefLimit = coefLimit
+        self._powerLimit = powerLimit
 
-def createExpression(termsNum, bigNumbers):
-    expr = ""
-    for i in range(termsNum):
-        t = createTerm(bigNumbers)
-        if not expr:
-            expr += t[0]
+    def create(self):
+        coef = self.__createCoef()
+        power = self.__createPower()
+        return "%s * X^%s" % (coef, power)
+
+    def __createCoef(self):
+        if random.randint(0, 1):
+            coef = round(random.uniform(0, self._coefLimit), 2)
         else:
-            expr += (" - " if t[1] else " + ") + t[0]
-    return expr
+            coef = random.randint(0, self._coefLimit)
+        return coef
+
+    def __createPower(self):
+        power = random.randint(0, self._powerLimit)
+        return power
+
+
+class ExpressionCreator:
+    def __init__(self, leftTermsLimit=3, rightTermsLimit=3, coefLimit=100, powerLimit=2):
+        self._leftTermsLimit = leftTermsLimit
+        self._rightTermsLimit = rightTermsLimit
+
+        self._termCreator = TermCreator(coefLimit, powerLimit)
+
+    def create(self):
+        leftExpr = self.__create(self._leftTermsLimit)
+        rightExpr = self.__create(self._rightTermsLimit)
+        return "%s = %s" % (leftExpr, rightExpr)
+
+    def __create(self, termsLimit):
+        expr = ""
+        for _ in range(termsLimit):
+            term = self._termCreator.create()
+
+            if expr:
+                if random.randint(0, 1):
+                    expr += " - "
+                else:
+                    expr += " + "
+
+            expr += term
+        return expr
 
 def main():
     org_stdout = sys.stdout
-    with open("test/expressions.in", "w") as f:
-        sys.stdout = f
-        expressionsNum = 10
-        expressions = []
-        bigNumbers = 0
-        for i in range(expressionsNum):
-            leftTermsNum = random.randint(1, 3)
-            rightTermsNum = random.randint(1, 3)
+    # TODO: check args amount
+    with open(sys.argv[1], "w") as file:
+        sys.stdout = file
 
-            leftExpression = createExpression(leftTermsNum, bigNumbers)
-            rightExpression = createExpression(rightTermsNum, bigNumbers)
+        expressions = [ExpressionCreator().create() for _ in range(10)]
+        [print(expr) for expr in expressions]
 
-            expression = leftExpression + " = " + rightExpression
-            expressions.append(expression)
-
-        for i in range(len(expressions)):
-            print(expressions[i])
     sys.stdout = org_stdout
 
 if __name__ == "__main__":
