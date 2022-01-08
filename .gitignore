@@ -1,4 +1,9 @@
-/* * */
-/* !inc/*.cpp */
-/* !src/*.h */
-/* !test/*.in */
+*
+!src/
+!src/*.cpp
+
+!inc/
+!inc/*.h
+
+!test/
+!test/*.py
