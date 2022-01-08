@@ -18,8 +18,10 @@ Token UnknownTokenExtractor::extract(
     {
         throw std::logic_error("Wrong unknown term");
     }
-    while (*it < '0' || '2' < *it ||
-          ((it + 1) != end && *(it + 1) >= '0' && *(it + 1) <= '9'))
+    if (*it < '0' || '2' < *it ||
+       ((it + 1) != end &&
+        *(it + 1) >= '0' &&
+        *(it + 1) <= '9'))
     {
         throw std::logic_error("Wrong unknown term");
     }

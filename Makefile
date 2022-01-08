@@ -39,8 +39,9 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-clean:
+clean: clean_test
 	@echo ${YELLOW}Cleaning $(OBJDIR)/*.o ${NOCOLOR}
+	@echo ${YELLOW}Cleaning $(TESTDIR)/*.{in,out} ${NOCOLOR}
 	@rm -rf $(OBJDIR)
 
 fclean: clean
@@ -52,10 +53,10 @@ test: all gen_test_cases
 	./$(TESTDIR)/run.sh $(NAME) $(TESTDIR)/expressions.in $(TESTDIR)/expressions.out
 
 gen_test_cases:
-	python3 $(TESTDIR)/expr_generator.py $(TESTDIR)/expressions.in
+	python3 $(TESTDIR)/ExpressionsCreator.py $(TESTDIR)/expressions.in
 
 clean_test:
 	@rm -f $(TESTDIR)/expressions.in $(TESTDIR)/expressions.out
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re test gen_test_cases clean_test
 
