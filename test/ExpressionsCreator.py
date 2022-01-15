@@ -22,7 +22,6 @@ class TermCreator:
         power = random.randint(0, self._powerLimit)
         return power
 
-
 class ExpressionCreator:
     def __init__(self, leftTermsLimit=3, rightTermsLimit=3, coefLimit=100, powerLimit=2):
         self._leftTermsLimit = leftTermsLimit
@@ -51,7 +50,7 @@ class ExpressionCreator:
 
 def main():
     org_stdout = sys.stdout
-    # TODO: check args amount
+    # TODO: check args' amount
     with open(sys.argv[1], "w") as file:
         sys.stdout = file
 

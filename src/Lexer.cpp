@@ -4,6 +4,7 @@
 Lexer::Lexer(const std::string& str)
     : _str{removeWhiteSpaces(str)}
     , _it{_str.begin()}
+    , _begin{_str.begin()}
     , _end{_str.end()}
 {}
 
@@ -33,6 +34,16 @@ Token Lexer::getNextToken()
     if (_it == _end)
     {
         return {TokenKind::End, std::nullopt};
+    }
+
+    if (_it == _begin)
+    {
+        if (*_it != '-' && (*_it < '0' || *_it > '9'))
+        {
+            throw std::logic_error{
+                "Wrong token at the beginning of the expression"
+            };
+        }
     }
 
     auto extractor = createTokenExtractor(*_it);
