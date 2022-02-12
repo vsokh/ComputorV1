@@ -1,7 +1,7 @@
-#include <exception>
-
 #include "TokenExtractor.h"
 #include "UnknownTokenExtractor.h"
+
+#include <exception>
 
 Token UnknownTokenExtractor::extract(
         typename std::string::iterator& it,

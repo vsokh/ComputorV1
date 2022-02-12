@@ -10,7 +10,6 @@ public:
     Token getNextToken();
 
 private:
-
     static std::string removeWhiteSpaces(std::string str);
 
 private:

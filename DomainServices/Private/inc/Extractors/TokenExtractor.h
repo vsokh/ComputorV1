@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Token.h"
+
 #include <string>
 #include <memory>
-#include "Token.h"
 
 class TokenExtractor
 {

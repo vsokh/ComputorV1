@@ -1,9 +1,8 @@
-#include <unordered_map>
-#include <exception>
-
 #include "TokenExtractor.h"
 #include "OperationTokenExtractor.h"
 
+#include <unordered_map>
+#include <exception>
 Token OperationTokenExtractor::extract(
         typename std::string::iterator& it,
         typename std::string::const_iterator end)

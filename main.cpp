@@ -1,5 +1,5 @@
-#include "Parser.h"
-#include "Solver.h"
+#include "DomainServices/Public/inc/Parser.h"
+#include "DomainServices/Public/inc/Solver.h"
 
 #include "Presenters/ExpressionPresenter.h"
 #include "Presenters/CLIExpressionPresenter.h"
@@ -7,7 +7,6 @@
 /* #include "Presenters/SolutionPresenter.h" */
 /* #include "Presenters/CLISolutionPresenter.h" */
 
-#include <iostream>
 #include <memory>
 
 std::unique_ptr<ExpressionPresenter> createExpressionPresenter()
