@@ -5,21 +5,41 @@ SRCDIR = src
 OBJDIR = obj
 TESTDIR = test
 
-DEPS = inc/Lexer.h \
-	   inc/Token.h \
-	   inc/TokenExtractor.h \
-	   inc/UnknownTokenExtractor.h \
-	   inc/OperationTokenExtractor.h \
-	   inc/NumberTokenExtractor.h
+DEPS = inc/Domain/Token.h \
+	   inc/Domain/Expression.h \
+	   inc/Domain/Solution.h \
+	   inc/DomainServices/Parser.h \
+	   inc/DomainServices/Lexer.h \
+	   inc/DomainServices/Solver.h \
+	   inc/DomainServices/Extractors/TokenExtractor.h \
+	   inc/DomainServices/Extractors/UnknownTokenExtractor.h \
+	   inc/DomainServices/Extractors/OperationTokenExtractor.h \
+	   inc/DomainServices/Extractors/NumberTokenExtractor.h \
+	   inc/Presenters/SolutionPresenter.h \
+	   inc/Presenters/ExpressionPresenter.h \
+	   inc/Presenters/CLISolutionPresenter.h \
+	   inc/Presenters/CLIExpressionPresenter.h
 
-INC = -I inc
+INC = -I inc \
+	  -I inc/Domain \
+	  -I inc/Presenters \
+	  -I inc/DomainServices \
+
 SRC = main.cpp \
-	  Lexer.cpp \
 	  Token.cpp \
+	  Expression.cpp \
+	  Solution.cpp \
+	  Parser.cpp \
+	  Lexer.cpp \
+	  Solver.cpp \
 	  TokenExtractor.cpp \
 	  UnknownTokenExtractor.cpp \
 	  OperationTokenExtractor.cpp \
-	  NumberTokenExtractor.cpp
+	  NumberTokenExtractor.cpp \
+	  SolutionPresenter.cpp \
+	  ExpressionPresenter.cpp \
+	  CLISolutionPresenter.cpp \
+	  CLIExpressionPresenter.cpp \
 
 OBJ = $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
 

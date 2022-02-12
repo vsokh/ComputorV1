@@ -28,4 +28,6 @@ struct Token
     TokenValue value;
 };
 
+using Tokens = std::vector<Token>;
+
 std::ostream& operator<<(std::ostream &o, const Token& rhs);

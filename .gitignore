@@ -1,10 +1,4 @@
-*
-!src/
-!src/*.cpp
-
-!inc/
-!inc/*.h
-
-!test/
-!test/*.py
-!test/*.sh
+obj
+computor
+test/*.in
+test/*.out
