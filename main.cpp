@@ -4,20 +4,12 @@
 #include "Presenters/ExpressionPresenter.h"
 #include "Presenters/CLIExpressionPresenter.h"
 
-/* #include "Presenters/SolutionPresenter.h" */
-/* #include "Presenters/CLISolutionPresenter.h" */
-
 #include <memory>
 
 std::unique_ptr<ExpressionPresenter> createExpressionPresenter()
 {
     return std::make_unique<CLIExpressionPresenter>();
 }
-
-/* std::unique_ptr<SolutionPresenter> createSolutionPresenter() */
-/* { */
-/*     return std::make_unique<CLISolutionPresenter>(); */
-/* } */
 
 int main(int argc, char **argv)
 {
@@ -41,7 +33,5 @@ int main(int argc, char **argv)
 
     const auto& solution = Solver{}.solve(expression);
     (void)solution;
-    /* const auto& solPresenter = createSolutionPresenter(); */
-    /* solPresenter->present(solution); */
     return 0;
 }
