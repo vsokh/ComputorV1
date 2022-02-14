@@ -1,5 +1,5 @@
+#include "TokenExtractorFactory.h"
 #include "Lexer.h"
-#include "TokenExtractor.h"
 
 Lexer::Lexer(const std::string& str)
     : _str{removeWhiteSpaces(str)}
@@ -46,7 +46,7 @@ Token Lexer::getNextToken()
         }
     }
 
-    auto extractor = createTokenExtractor(*_it);
+    auto extractor = TokenExtractorFactory{}.create(*_it);
     return extractor->extract(_it, _end);
 }
 

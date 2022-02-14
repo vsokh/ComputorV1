@@ -1,47 +1,46 @@
 NAME = computor
 CC = g++
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -O0 -g
-SRCDIR = src
 OBJDIR = obj
 TESTDIR = test
 
-DEPS = inc/Domain/Token.h \
-	   inc/Domain/Expression.h \
-	   inc/Domain/Solution.h \
-	   inc/DomainServices/Parser.h \
-	   inc/DomainServices/Lexer.h \
-	   inc/DomainServices/Solver.h \
-	   inc/DomainServices/Extractors/TokenExtractor.h \
-	   inc/DomainServices/Extractors/UnknownTokenExtractor.h \
-	   inc/DomainServices/Extractors/OperationTokenExtractor.h \
-	   inc/DomainServices/Extractors/NumberTokenExtractor.h \
-	   inc/Presenters/SolutionPresenter.h \
-	   inc/Presenters/ExpressionPresenter.h \
-	   inc/Presenters/CLISolutionPresenter.h \
-	   inc/Presenters/CLIExpressionPresenter.h
+INC = -I Domain/inc \
+	  -I DomainServices/inc \
+	  -I DomainServices/inc/Extractors \
+	  -I Presenters/inc \
 
-INC = -I inc \
-	  -I inc/Domain \
-	  -I inc/Presenters \
-	  -I inc/DomainServices \
+SRC =  main.cpp \
+	   Domain/src/Token.cpp \
+	   DomainServices/src/Parser.cpp \
+	   DomainServices/src/Lexer.cpp \
+	   DomainServices/src/Solver.cpp \
+	   DomainServices/inc/Extractors/TokenExtractorFactory.cpp \
+	   DomainServices/src/Extractors/UnknownTokenExtractor.cpp \
+	   DomainServices/src/Extractors/OperationTokenExtractor.cpp \
+	   DomainServices/src/Extractors/NumberTokenExtractor.cpp \
+	   Presenters/src/CLISolutionPresenter.cpp \
+	   Presenters/src/CLIExpressionPresenter.cpp
 
-SRC = main.cpp \
-	  Token.cpp \
-	  Expression.cpp \
-	  Solution.cpp \
-	  Parser.cpp \
-	  Lexer.cpp \
-	  Solver.cpp \
-	  TokenExtractor.cpp \
-	  UnknownTokenExtractor.cpp \
-	  OperationTokenExtractor.cpp \
-	  NumberTokenExtractor.cpp \
-	  SolutionPresenter.cpp \
-	  ExpressionPresenter.cpp \
-	  CLISolutionPresenter.cpp \
-	  CLIExpressionPresenter.cpp \
+HEADER_DEPS = Domain/inc/Token.h \
+	   Domain/inc/Expression.h \
+	   Domain/inc/Solution.h \
+	   DomainServices/inc/Parser.h \
+	   DomainServices/inc/Lexer.h \
+	   DomainServices/inc/Solver.h \
+	   DomainServices/inc/Extractors/TokenExtractorFactory.h \
+	   DomainServices/inc/Extractors/TokenExtractor.h \
+	   DomainServices/inc/Extractors/UnknownTokenExtractor.h \
+	   DomainServices/inc/Extractors/OperationTokenExtractor.h \
+	   DomainServices/inc/Extractors/NumberTokenExtractor.h \
+	   Presenters/inc/SolutionPresenter.h \
+	   Presenters/inc/ExpressionPresenter.h \
+	   Presenters/inc/CLISolutionPresenter.h \
+	   Presenters/inc/CLIExpressionPresenter.h
 
-OBJ = $(addprefix $(OBJDIR)/, $(SRC:.cpp=.o))
+CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
+OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))
+
+VPATH = $(dir $(SRC))
 
 RED = "\033[0;31m"
 YELLOW = "\033[33m"
@@ -50,14 +49,16 @@ NOCOLOR = "\033[0m"
 
 all: $(NAME)
 
-$(NAME): $(DEPS) $(OBJ)
+$(NAME): $(OBJ) $(HEADER_DEPS)
 	$(CC) $(CFLAGS) $(INC) -o $@ $(OBJ)
 	@echo ${GREEN}$(NAME) has compiled successfully!${NOCOLOR}
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(DEPS)
+$(OBJDIR)/%.o: %.cpp $(HEADER_DEPS)
 	@echo ${YELLOW}Compiling $<${NOCOLOR}
 	@mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $< -MD
+
+include $(wildcard $(CPP_DEPS))
 
 clean: clean_test
 	@echo ${YELLOW}Cleaning $(OBJDIR)/*.o ${NOCOLOR}
@@ -79,4 +80,3 @@ clean_test:
 	@rm -f $(TESTDIR)/expressions.in $(TESTDIR)/expressions.out
 
 .PHONY: all clean fclean re test gen_test_cases clean_test
-

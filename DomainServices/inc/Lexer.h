@@ -1,8 +1,7 @@
 #pragma once
 
+#include "Token.h"
 #include <string>
-
-struct Token;
 
 class Lexer {
 public:

@@ -1,11 +1,13 @@
-#include "DomainServices/Public/inc/Parser.h"
-#include "DomainServices/Public/inc/Solver.h"
+#include "Parser.h"
+#include "Solver.h"
 
-#include "Presenters/ExpressionPresenter.h"
-#include "Presenters/CLIExpressionPresenter.h"
+#include "ExpressionPresenter.h"
+#include "CLIExpressionPresenter.h"
 
 #include <memory>
+#include <iostream>
 
+// TODO: add factory
 std::unique_ptr<ExpressionPresenter> createExpressionPresenter()
 {
     return std::make_unique<CLIExpressionPresenter>();
@@ -19,15 +21,12 @@ int main(int argc, char **argv)
     // 3. etc
     // TODO: Support higher term's degree
 
-    (void)argv;
     if (argc <= 1)
     {
         return 1;
     }
 
-    const auto& expr = std::string{"5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0"};
-    const auto& expression = Parser{}.parse(expr);
-
+    const auto& expression = Parser{}.parse(argv[1]);
     const auto& exprPresenter = createExpressionPresenter();
     exprPresenter->present(expression);
 

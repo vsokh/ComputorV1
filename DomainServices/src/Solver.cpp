@@ -2,6 +2,8 @@
 #include "Solution.h"
 #include "Expression.h"
 
+#include <cmath>
+
 Solution Solver::solve(const Expression& expression)
 {
     const auto& x0 = expression.x0;

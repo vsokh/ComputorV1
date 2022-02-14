@@ -19,5 +19,6 @@ Token NumberTokenExtractor::extract(
     {
         ++it;
     }
+    int i = 0;(void)i;
     return {TokenKind::Num, std::stod(std::string{beg, it})};
 }

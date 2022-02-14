@@ -2,7 +2,7 @@
 #include "Expression.h"
 #include <iostream>
 
-void CLIExpressionPresenter::present(const Expression& expression) const override
+void CLIExpressionPresenter::present(const Expression& expression) const
 {
     auto x0 = expression.x0;
     auto x1 = expression.x1;

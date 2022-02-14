@@ -5,7 +5,7 @@ Tokens Parser::toTokens(const std::string& expr)
 {
     Tokens tokens;
 
-    const auto& lexer = Lexer{expr};
+    auto lexer = Lexer{expr};
     for (auto token = lexer.getNextToken();
               token != TokenKind::End;
               token = lexer.getNextToken())
@@ -15,7 +15,7 @@ Tokens Parser::toTokens(const std::string& expr)
     return tokens;
 }
 
-Terms Parser::toTerms(Tokens tokens)
+Terms Parser::toTerms(const Tokens& tokens)
 {
     Terms terms;
 
@@ -59,7 +59,7 @@ Terms Parser::toTerms(Tokens tokens)
             }
             case TokenKind::Unknown:
             {
-                term.deg = token.value;
+                term.deg = *token.value;
                 terms.push_back(term);
 
                 sign = 1;
@@ -91,6 +91,6 @@ Expression Parser::parse(const std::string& expr)
         if (term.deg == 1) expression.x1.coef += term.coef;
         if (term.deg == 2) expression.x2.coef += term.coef;
     }
-    return Expression{terms};
+    return expression;
 }
 

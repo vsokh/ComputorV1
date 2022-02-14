@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "TokenExtractor.h"
 
 class TokenExtractor;
 struct Token;
