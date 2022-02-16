@@ -11,5 +11,8 @@ public:
 private:
     Tokens toTokens(const std::string& expr);
     Terms toTerms(const Tokens& tokens);
+
+    Expression reduceTerms(const Terms& terms);
+    void sortTerms(Terms& terms);
 };
 

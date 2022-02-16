@@ -1,6 +1,6 @@
 NAME = computor
 CC = g++
-CFLAGS = -Wall -Wextra -Werror -std=c++17 -O0 -g
+CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
 OBJDIR = obj
 TESTDIR = test
 

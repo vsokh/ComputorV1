@@ -39,7 +39,7 @@ Terms Parser::toTerms(const Tokens& tokens)
             }
             case TokenKind::Num:
             {
-                term.coef += *token.value * sign * wasEq;
+                term.coefficient += *token.value * sign * wasEq;
                 break;
             }
             case TokenKind::Mul:
@@ -59,7 +59,7 @@ Terms Parser::toTerms(const Tokens& tokens)
             }
             case TokenKind::Unknown:
             {
-                term.deg = *token.value;
+                term.degree = *token.value;
                 terms.push_back(term);
 
                 sign = 1;
@@ -72,25 +72,33 @@ Terms Parser::toTerms(const Tokens& tokens)
     return terms;
 }
 
+Expression Parser::reduceTerms(const Terms& terms)
+{
+    Expression expression;
+    for (const auto& term : terms)
+    {
+        if (term.degree == 0) expression.x0.coefficient += term.coefficient;
+        if (term.degree == 1) expression.x1.coefficient += term.coefficient;
+        if (term.degree == 2) expression.x2.coefficient += term.coefficient;
+    }
+    return expression;
+}
+
+void Parser::sortTerms(Terms& terms)
+{
+    std::sort(terms.begin(),
+              terms.end(),
+              [](const Term& lhs, const Term& rhs)
+              {
+                  return lhs.degree < rhs.degree;
+              });
+}
+
 Expression Parser::parse(const std::string& expr)
 {
     const auto& tokens = toTokens(expr);
     auto terms = toTerms(tokens);
 
-    // Reducer
-    std::sort(terms.begin(),
-              terms.end(),
-              [](const Term& lhs, const Term& rhs)
-              {
-                  return lhs.deg < rhs.deg;
-              });
-    Expression expression;
-    for (auto term : terms)
-    {
-        if (term.deg == 0) expression.x0.coef += term.coef;
-        if (term.deg == 1) expression.x1.coef += term.coef;
-        if (term.deg == 2) expression.x2.coef += term.coef;
-    }
-    return expression;
+    sortTerms(terms);
+    return reduceTerms(terms);
 }
-

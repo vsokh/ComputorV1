@@ -3,8 +3,8 @@
 
 struct Term
 {
-    double coef;
-    int deg;
+    double coefficient;
+    int degree;
 };
 
 struct Expression
