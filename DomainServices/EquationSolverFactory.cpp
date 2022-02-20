@@ -19,5 +19,6 @@ std::unique_ptr<EquationSolver> EquationSolverFactory::create(Polynomial polynom
             return std::make_unique<EquationSolverFor2DegreePolynomial>(std::move(polynomial));
         }
     }
+    throw std::logic_error("The polynomial degree is strictly greater than 2, I can't solve.");
     return nullptr;
 }

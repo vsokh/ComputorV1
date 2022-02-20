@@ -20,12 +20,12 @@ Tokens toTokens(const std::string& expr)
     return tokens;
 }
 
-Monomials toMonomials(Tokens&& tokens)
+Polynomial toPolynomial(Tokens&& tokens)
 {
-    Monomials monomials;
+    Polynomial polynomial;
 
     /* bool unknownIsNext = false; */
-    Monomial monomial;
+    Monomial tmpMonomial;
     double sign = 1;
     double wasEq = 1;
 
@@ -44,7 +44,7 @@ Monomials toMonomials(Tokens&& tokens)
             }
             case TokenKind::Num:
             {
-                monomial.coefficient += *token.value * sign * wasEq;
+                tmpMonomial.coefficient += *token.value * sign * wasEq;
                 break;
             }
             case TokenKind::Mul:
@@ -64,36 +64,15 @@ Monomials toMonomials(Tokens&& tokens)
             }
             case TokenKind::Unknown:
             {
-                monomial.degree = static_cast<Degree>(*token.value);
-                monomials[monomial.degree] += monomial;
+                tmpMonomial.degree = static_cast<Degree>(*token.value);
+                polynomial.addMonomial(tmpMonomial);
 
                 sign = 1;
                 /* unknownIsNext = false; */
-                monomial = Monomial{};
+                tmpMonomial = Monomial{};
                 break;
             }
         }
-    }
-    return monomials;
-}
-
-Polynomial toPolynomial(Monomials&& monomials)
-{
-    std::unordered_map<Degree, Monomial> degreeToMonomialMap;
-    for (const auto& [degree, monomial] : monomials)
-    {
-        degreeToMonomialMap[degree] = monomial;
-    }
-
-    for (const auto& [degree, monomial] : monomials)
-    {
-        degreeToMonomialMap[degree] += monomial;
-    }
-
-    Polynomial polynomial;
-    for (const auto& [_, monomial] : degreeToMonomialMap)
-    {
-        polynomial.addMonomial(monomial);
     }
     return polynomial;
 }
@@ -101,7 +80,5 @@ Polynomial toPolynomial(Monomials&& monomials)
 Polynomial PolynomialParser::parse(const std::string& expr)
 {
     auto tokens = toTokens(expr);
-    auto monomials = toMonomials(std::move(tokens));
-    auto polynomial = toPolynomial(std::move(monomials));
-    return polynomial;
+    return toPolynomial(std::move(tokens));
 }

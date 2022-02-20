@@ -13,8 +13,8 @@ Solution EquationSolverFor1DegreePolynomial::solve()
     const auto& x1 = _polynomial.getMonomial(1);
 
     Solution solution;
-    solution.root1 = -1*x0.coefficient / x1.coefficient;
+    solution.root1 = -1*x0->coefficient / x1->coefficient;
     solution.hasRoots = true;
-    solution.hasInfRoots = x1.coefficient == 0.0;
+    solution.hasInfRoots = x1->coefficient == 0.0;
     return solution;
 }

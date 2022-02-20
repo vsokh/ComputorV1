@@ -11,5 +11,9 @@ public:
     void present() const override;
 
 private:
+    void presentPolynomialEquation() const;
+    void presentPolynomialDegree() const;
+
+private:
     Polynomial _polynomial;
 };

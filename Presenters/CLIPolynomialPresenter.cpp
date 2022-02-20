@@ -9,19 +9,38 @@ CLIPolynomialPresenter::CLIPolynomialPresenter(Polynomial polynomial)
 
 void CLIPolynomialPresenter::present() const
 {
-    std::cout << __FUNCTION__ << std::endl;
-    auto x0 = _polynomial.getMonomial(0);
-    auto x1 = _polynomial.getMonomial(1);
-    auto x2 = _polynomial.getMonomial(2);
+    presentPolynomialEquation();
+    presentPolynomialDegree();
+}
 
-    std::cout << "Reduced form: ";
-    if (x0.coefficient < 0.0)      std::cout << "- " << (-1*x0.coefficient) << " * X^0";
-    else if (x0.coefficient > 0.0) std::cout << x0.coefficient << " * X^0";
+void CLIPolynomialPresenter::presentPolynomialEquation() const
+{
+    std::cout << "Reduced form:";
+    auto presentMonomial = [](const Monomial& monomial, bool isFirst)
+    {
+        auto sign = monomial.coefficient < 0.0 ? -1 : 1;
+        if (sign < 0)
+        {
+            std::cout << " - ";
+        }
+        else
+        {
+            std::cout << (isFirst ? " " : " + ");
+        }
+        std::cout << sign * monomial.coefficient << " * X^" << monomial.degree;
+    };
 
-    if (x1.coefficient < 0.0)      std::cout << " - " << (-1*x1.coefficient) << " * X^1";
-    else if (x1.coefficient > 0.0) std::cout << " + " << x1.coefficient << " * X^1";
+    bool isFirst = true;
+    for (const auto& monomial : _polynomial.getMonomials())
+    {
+        presentMonomial(monomial, isFirst);
+        isFirst = false;
+    }
 
-    if (x2.coefficient < 0.0)      std::cout << " - " << (-1*x2.coefficient) << " * X^2";
-    else if (x2.coefficient > 0.0) std::cout << " + " << x2.coefficient << " * X^2";
-    std::cout << " = 0" << std::endl;
+    std::cout << " = 0\n";
+}
+
+void CLIPolynomialPresenter::presentPolynomialDegree() const
+{
+    std::cout << "Polynomial degree: " << _polynomial.getDegree() << "\n";
 }

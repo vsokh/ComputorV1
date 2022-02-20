@@ -1,31 +1,59 @@
 #include "Polynomial.h"
 
-void Polynomial::adjustDegree(const Monomial& monomial)
-{
-    _degree = _degree < monomial.degree ? monomial.degree : _degree;
-}
-
 void Polynomial::addMonomial(Monomial monomial)
 {
-    if (auto monomialIt = _monomials.find(monomial.degree);
-             monomialIt != _monomials.end())
+    if (monomial.coefficient == 0.0)
     {
-        _monomials[monomial.degree] += monomial;
+        return;
+    }
+
+    if (auto monomialOpt = getMonomial(monomial.degree))
+    {
+        auto& tmpMonomial = _monomials[monomial.degree];
+        tmpMonomial += monomial;
+        if (tmpMonomial.coefficient == 0.0)
+        {
+            _monomials.erase(monomial.degree);
+        }
     }
     else
     {
         _monomials[monomial.degree] = monomial;
     }
-
-    adjustDegree(monomial);
 }
 
-Monomial Polynomial::getMonomial(Degree degree) const
+std::optional<Monomial> Polynomial::getMonomial(Degree degree) const
 {
-    return _monomials.at(degree);
+    if (auto monomialIt = _monomials.find(degree);
+            monomialIt != _monomials.end())
+    {
+        return _monomials.at(degree);
+    }
+    return std::nullopt;
+}
+
+Monomials Polynomial::getMonomials() const
+{
+    std::vector<Monomial> monomials;
+    for (const auto& [_, monomial] : _monomials)
+    {
+        monomials.push_back(monomial);
+    }
+    std::sort(monomials.begin(),
+              monomials.end(),
+              [](const Monomial& lhs, const Monomial& rhs)
+              {
+                    return lhs.degree < rhs.degree;
+              });
+    return monomials;
 }
 
 Degree Polynomial::getDegree() const
 {
-    return _degree;
+    Degree maxDegree{};
+    for (auto& [degree, _] : _monomials)
+    {
+        maxDegree = std::max(maxDegree, degree);
+    }
+    return maxDegree;
 }

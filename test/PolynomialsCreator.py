@@ -3,8 +3,8 @@ import sys
 
 
 class MonomialCreator:
-    def __init__(self, coef_limit=100, degree_limit=2):
-        self._coef_limit = coef_limit
+    def __init__(self, coefficient_limit=100, degree_limit=2):
+        self._coefficient_limit = coefficient_limit
         self._degree_limit = degree_limit
 
     def create(self):
@@ -14,9 +14,9 @@ class MonomialCreator:
 
     def __create_coefficient(self):
         if random.randint(0, 1):
-            coefficient = round(random.uniform(0, self._coef_limit), 2)
+            coefficient = round(random.uniform(0, self._coefficient_limit), 2)
         else:
-            coefficient = random.randint(0, self._coef_limit)
+            coefficient = random.randint(0, self._coefficient_limit)
         return coefficient
 
     def __create_degree(self):

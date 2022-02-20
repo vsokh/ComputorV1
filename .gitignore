@@ -1,5 +1,5 @@
 .idea
-cmake-debug-build
+cmake-debug-build/
 CMakeLists.txt
 venv
 obj

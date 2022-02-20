@@ -1,6 +1,6 @@
 #pragma once
 
-#include <unordered_map>
+#include <vector>
 
 using Degree = int;
 using Coefficient = double;
@@ -14,4 +14,4 @@ struct Monomial
     Degree degree{};
 };
 
-using Monomials = std::unordered_map<Degree, Monomial>;
+using Monomials = std::vector<Monomial>;

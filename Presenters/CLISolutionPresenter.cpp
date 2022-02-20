@@ -9,5 +9,11 @@ CLISolutionPresenter::CLISolutionPresenter(Solution solution)
 
 void CLISolutionPresenter::present() const
 {
-    std::cout << __FUNCTION__ << std::endl;
+    if (_solution.discriminant > 0.0)
+    {
+        std::cout << "Discriminant is strictly positive, the two solutions are: " << std::endl;
+    }
+
+    std::cout << _solution.root1 << std::endl;
+    std::cout << _solution.root2 << std::endl;
 }
