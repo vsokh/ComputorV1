@@ -1,4 +1,7 @@
 .idea
+cmake-debug-build
+CMakeLists.txt
+venv
 obj
 computor
 test/*.in
