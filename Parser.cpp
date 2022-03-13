@@ -52,7 +52,7 @@ Tokens Parser::toTokens(std::string expr)
     return result;
 }
 
-Terms Parser::toTerms(Tokens tokens)
+Terms Parser::toTerms(const Tokens& tokens)
 {
     Terms result;
 
