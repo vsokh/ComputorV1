@@ -3,11 +3,9 @@ CC = g++
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
 OBJDIR = obj
 TESTDIR = test
+SRC =  main.cpp Parser.cpp
 
-INC = -I
-SRC =  main.cpp
-
-HEADER_DEPS =
+HEADER_DEPS = Expression.hpp Parser.hpp
 
 CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
 OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))
@@ -21,11 +19,11 @@ NOCOLOR = "\033[0m"
 
 all: $(NAME)
 
-$(NAME): $(OBJ) #$(HEADER_DEPS)
+$(NAME): $(OBJ) $(HEADER_DEPS)
 	$(CC) $(CFLAGS) $(INC) -o $@ $(OBJ)
 	@echo ${GREEN}$(NAME) has compiled successfully!${NOCOLOR}
 
-$(OBJDIR)/%.o: %.cpp #$(HEADER_DEPS)
+$(OBJDIR)/%.o: %.cpp $(HEADER_DEPS)
 	@echo ${YELLOW}Compiling $<${NOCOLOR}
 	@mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $< -MD
@@ -40,7 +38,7 @@ clean: clean_test
 fclean: clean
 	@rm -f $(NAME)
 
-re: clean all
+re: fclean all
 
 test: all gen_test_cases
 	./$(TESTDIR)/run.sh $(NAME) $(TESTDIR)/expressions.in $(TESTDIR)/expressions.out
