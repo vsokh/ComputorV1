@@ -1,11 +1,12 @@
 NAME = computor
+CPP_TEST = cpp_test
 CC = g++
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
 OBJDIR = obj
 TESTDIR = test
-SRC =  main.cpp Parser.cpp
+SRC =  main.cpp Parser.cpp Exceptions.cpp
 
-HEADER_DEPS = Expression.hpp Parser.hpp
+HEADER_DEPS = Expression.hpp Parser.hpp Exceptions.hpp
 
 CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
 OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))
@@ -18,6 +19,13 @@ GREEN = "\033[0;32m"
 NOCOLOR = "\033[0m"
 
 all: $(NAME)
+
+run_test: $(CPP_TEST)
+	./cpp_test
+
+$(CPP_TEST): $(OBJ) $(HEADER_DEPS)
+	$(CC) $(CFLAGS) $(INC) -o $@ $(OBJ)
+	@echo ${GREEN}$(TEST_TARGET) has compiled successfully!${NOCOLOR}
 
 $(NAME): $(OBJ) $(HEADER_DEPS)
 	$(CC) $(CFLAGS) $(INC) -o $@ $(OBJ)

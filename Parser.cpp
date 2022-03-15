@@ -2,6 +2,7 @@
 
 #include <regex>
 #include <unordered_map>
+#include "Exceptions.hpp"
 
 static const char* termPattern = "([-+]{0,1}0{1}|[-+]{0,1}[1-9]+|[-+]{0,1}[1-9]+\\.[0-9]+)\\*X\\^(0{1}|[1-9]+)";
 
@@ -11,12 +12,12 @@ Expression Parser::parse(std::string exprStr)
 
     auto eq = std::find(exprStr.begin(), exprStr.end(), '=');
     if (eq == exprStr.end()) {
-        throw std::logic_error{"Expression is invalid"};
+        throw InvalidExpression(std::move(exprStr));
     }
     auto lhsStr = std::string{exprStr.begin(), eq};
     auto rhsStr = std::string{eq+1, exprStr.end()};
     if (lhsStr.empty() || rhsStr.empty()) {
-        throw std::logic_error{"Expression is invalid"};
+        throw InvalidExpression(std::move(exprStr));
     }
 
     auto lhs = toExpression(std::move(lhsStr));
@@ -77,7 +78,7 @@ Terms Parser::toTerms(const Tokens& tokens)
             result.push_back(term);
         }
         else {
-            throw std::logic_error{"Wrong term: " + str};
+            throw InvalidTerm(std::move(str));
         }
     }
     return result;

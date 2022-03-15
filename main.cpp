@@ -1,11 +1,8 @@
-#include <exception>
 #include <iostream>
-
 #include "Parser.hpp"
 
 int main()
 {
-    // TODO: Parser tests
     // TODO: Expression presenter
     // TODO: Solver
     // TODO: Solver tests
