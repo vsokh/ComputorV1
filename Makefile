@@ -1,12 +1,16 @@
 NAME = computor
 CPP_TEST = cpp_test
+
 CC = g++
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
+
 OBJDIR = obj
 TESTDIR = test
-SRC =  main.cpp Parser.cpp Exceptions.cpp
 
-HEADER_DEPS = Expression.hpp Parser.hpp Exceptions.hpp
+SRC = src/main.cpp src/Parser.cpp src/Exceptions.cpp src/ExpressionPresenter.cpp
+INC = -I inc
+
+HEADER_DEPS = inc/Expression.hpp inc/Parser.hpp inc/Exceptions.hpp inc/ExpressionPresenter.hpp
 
 CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
 OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))
@@ -20,8 +24,11 @@ NOCOLOR = "\033[0m"
 
 all: $(NAME)
 
+run: $(NAME)
+	./$(NAME)
+
 run_test: $(CPP_TEST)
-	./cpp_test
+	./$(CPP_TEST)
 
 $(CPP_TEST): $(OBJ) $(HEADER_DEPS)
 	$(CC) $(CFLAGS) $(INC) -o $@ $(OBJ)

@@ -117,5 +117,8 @@ Expression Parser::combine(const Expression& lhs, const Expression& rhs)
         result.push_back(term);
     }
 
+    std::sort(result.begin(), result.end(),
+              [](const Term& a, const Term& b){ return a.degree < b.degree; });
+
     return Expression{std::move(result)};
 }

@@ -1,20 +1,18 @@
 #include <iostream>
+
 #include "Parser.hpp"
+#include "ExpressionPresenter.hpp"
 
 int main()
 {
-    // TODO: Expression presenter
     // TODO: Solver
     // TODO: Solver tests
     // TODO: Solution presenter
 
-    std::string exprStr = "-2.0*X^4 - 1.0*X^3 + 1*X0.0 - 1*X^0 = 1*X^0";
-    std::cout << "expr: " << exprStr << std::endl;
+    std::string exprStr = "-2.0*X^4 - 1.0*X^3 + 1*X^0 - 1*X^0 = 1*X^0";
     try {
         auto expr = Parser::parse(exprStr);
-        for (auto term : expr.terms) {
-            std::cout << term.coef << ", " << term.degree << std::endl;
-        }
+        ExpressionPresenter::present(expr);
 
         auto highestDegreeTerm = std::max_element(expr.terms.begin(), expr.terms.end(),
                                                   [](const Term& a, const Term& b)
