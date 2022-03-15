@@ -4,5 +4,6 @@ CMakeLists.txt
 venv
 obj
 computor
+cpp_test
 test/*.in
 test/*.out

@@ -45,6 +45,7 @@ clean: clean_test
 
 fclean: clean
 	@rm -f $(NAME)
+	@rm -f $(CPP_TEST)
 
 re: fclean all
 
