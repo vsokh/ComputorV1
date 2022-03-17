@@ -45,12 +45,10 @@ Solution Solver::solveForSecondDegree(const Expression& expr)
     if (D == 0.0) {
         solution.roots.emplace_back(0.0);
     } else if (D > 0.0) {
-        const auto root1 = (-b - std::sqrt(D))/(2*a);
-        const auto root2 = (-b + std::sqrt(D))/(2*a);
+        const auto root1 = (-b - std::sqrt(D)) / (2 * a);
+        const auto root2 = (-b + std::sqrt(D)) / (2 * a);
         solution.roots.push_back(root1);
         solution.roots.push_back(root2);
-    } else {
-        solution.isNoRoots = true;
     }
     return solution;
 }

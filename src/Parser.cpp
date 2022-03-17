@@ -1,10 +1,10 @@
 #include "Parser.hpp"
+#include "Exceptions.hpp"
 
 #include <regex>
 #include <unordered_map>
-#include "Exceptions.hpp"
 
-static const char* termPattern = "([-+]{0,1}0{1}|[-+]{0,1}[1-9]+|[-+]{0,1}[1-9]+\\.[0-9]+)\\*X\\^(0{1}|[1-9]+)";
+static const char* termPattern = "([-+]{0,1}0{1}|[-+]{0,1}[0-9]+|[-+]{0,1}[0-9]+\\.[0-9]+)\\*X\\^(0{1}|[1-9]+)";
 
 Expression Parser::parse(std::string exprStr)
 {

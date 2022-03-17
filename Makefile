@@ -72,7 +72,7 @@ test: all gen_test_cases
 	./$(TESTDIR)/run.sh $(NAME) $(TESTDIR)/expressions.in $(TESTDIR)/expressions.out
 
 gen_test_cases:
-	python3 $(TESTDIR)/ExpressionsCreator.py $(TESTDIR)/expressions.in
+	python3 $(TESTDIR)/PolynomialsCreator.py $(TESTDIR)/expressions.in
 
 clean_test:
 	@rm -f $(TESTDIR)/expressions.in $(TESTDIR)/expressions.out
