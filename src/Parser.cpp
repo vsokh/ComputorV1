@@ -53,12 +53,12 @@ Tokens Parser::toTokens(std::string expr)
     return result;
 }
 
-Terms Parser::toTerms(const Tokens& tokens)
+Expression Parser::toExpression(std::string expr)
 {
-    Terms result;
-
+    Expression result;
     std::smatch base_match;
     std::regex rgx{termPattern};
+    const auto& tokens = toTokens(std::move(expr));
     for (auto str : tokens) {
         if (std::regex_match(str, base_match, rgx)) {
             Term term;
@@ -84,13 +84,6 @@ Terms Parser::toTerms(const Tokens& tokens)
     return result;
 }
 
-Expression Parser::toExpression(std::string expr)
-{
-    auto tokens = toTokens(std::move(expr));
-    auto terms = toTerms(std::move(tokens));
-    return Expression{std::move(terms)};
-}
-
 Expression Parser::combine(const Expression& lhs, const Expression& rhs)
 {
     std::unordered_map<double, Term> degreeToTerm;
@@ -104,15 +97,15 @@ Expression Parser::combine(const Expression& lhs, const Expression& rhs)
         }
     };
 
-    for (auto term : lhs.terms) {
+    for (auto term : lhs) {
         update(term);
     }
 
-    for (auto term : rhs.terms) {
+    for (auto term : rhs) {
         update(term, -1);
     }
 
-    Terms result;
+    Expression result;
     for (auto& [_, term] : degreeToTerm) {
         result.push_back(term);
     }

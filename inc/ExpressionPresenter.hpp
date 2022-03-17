@@ -1,6 +1,6 @@
 #pragma once
 
-struct Expression;
+#include "Expression.hpp"
 
 class ExpressionPresenter {
 public:

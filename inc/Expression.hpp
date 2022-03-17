@@ -7,8 +7,4 @@ struct Term {
     double degree;
 };
 
-using Terms = std::vector<Term>;
-
-struct Expression {
-    Terms terms;
-};
+using Expression = std::vector<Term>;

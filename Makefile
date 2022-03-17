@@ -7,10 +7,22 @@ CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
 OBJDIR = obj
 TESTDIR = test
 
-SRC = src/main.cpp src/Parser.cpp src/Exceptions.cpp src/ExpressionPresenter.cpp
+SRC = src/main.cpp \
+	  src/Parser.cpp \
+	  src/Solver.cpp \
+	  src/Exceptions.cpp \
+	  src/ExpressionPresenter.cpp \
+	  src/SolutionPresenter.cpp
+
 INC = -I inc
 
-HEADER_DEPS = inc/Expression.hpp inc/Parser.hpp inc/Exceptions.hpp inc/ExpressionPresenter.hpp
+HEADER_DEPS = inc/Expression.hpp \
+ 			  inc/Solution.hpp \
+ 			  inc/Parser.hpp \
+ 			  inc/Solver.hpp \
+ 			  inc/Exceptions.hpp \
+ 			  inc/ExpressionPresenter.hpp \
+ 			  inc/SolutionPresenter.hpp
 
 CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
 OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))

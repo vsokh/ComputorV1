@@ -21,11 +21,11 @@ void ExpressionPresenter::present(const Expression& expression)
     };
 
     bool isFirst = true;
-    for (const auto& term : expression.terms)
+    for (const auto& term : expression)
     {
         presentTerm(term, isFirst);
         isFirst = false;
     }
-
     std::cout << " = 0\n";
 }
+
