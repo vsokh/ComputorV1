@@ -23,7 +23,7 @@ HEADER_DEPS = inc/Expression.hpp \
  			  inc/Exceptions.hpp \
  			  inc/ExpressionPresenter.hpp \
  			  inc/SolutionPresenter.hpp \
- 			  Utils/SequenceSplitter.hpp
+ 			  Utils/SequenceUtils.hpp
 
 CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
 OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))

@@ -1,60 +1,43 @@
 #include "Parser.hpp"
 #include "Exceptions.hpp"
-#include "SequenceSplitter.hpp"
+#include "SequenceUtils.hpp"
 
 #include <regex>
 #include <unordered_map>
 
-using namespace Utils;
-
 static const char* termPattern = "([-+]{0,1}0{1}|[-+]{0,1}[0-9]+|[-+]{0,1}[0-9]+\\.[0-9]+)\\*X\\^(0{1}|[1-9]+)";
 
-Expression Parser::parse(std::string exprStr)
+namespace {
+
+void removeWhitespaces(std::string &str)
 {
-    removeWhitespaces(exprStr);
+    Utils::cleanSequence(str,
+                         [](char ch) {
+                             return ch == '\n' ||
+                                    ch == '\r' ||
+                                    ch == '\t' ||
+                                    ch == '\f' ||
+                                    ch == '\v' ||
+                                    ch == ' ';
+                         });
+}
+} // namespace
 
-    auto eq = std::find(exprStr.begin(), exprStr.end(), '=');
-    if (eq == exprStr.end()) {
-        throw InvalidExpression(std::move(exprStr));
-    }
-
-    auto lhsStr = std::string{exprStr.begin(), eq};
-    if (lhsStr.empty()) {
-        throw InvalidExpression(std::move(exprStr));
-    }
-    auto lhs = toExpression(std::move(lhsStr));
-
-    auto rhsStr = std::string{eq+1, exprStr.end()};
-    if (rhsStr.empty()) {
-        throw InvalidExpression(std::move(exprStr));
-    }
-    auto rhs = toExpression(std::move(rhsStr));
-
-    return combine(lhs, rhs);
+ExpressionParser::ExpressionParser(std::string exprStr)
+    : _exprStr{std::move(exprStr)}
+{
 }
 
-void Parser::removeWhitespaces(std::string& str)
-{
-    static const std::string whitespaces = " \n\r\t\f\v";
-    str.erase(std::remove_if(str.begin(), str.end(),
-                             [](char ch)
-                             {
-                                 return std::any_of(whitespaces.begin(), whitespaces.end(),
-                                                    [&ch](char whitespace)
-                                                    {
-                                                        return ch == whitespace;
-                                                    });
-                             }), str.end());
-}
 
-Expression Parser::toExpression(std::string expr)
+Expression ExpressionParser::parse()
 {
     Expression result;
     std::smatch base_match;
     std::regex rgx{termPattern};
-    SequenceSplitter splitter{std::move(expr),
-                              [](char ch){return ch == '-' || ch == '+'; }};
-    for (auto token : splitter.split())
+
+    const auto& tokens = Utils::splitSequence(std::move(_exprStr),
+                                         [](char ch) { return ch == '-' || ch == '+'; });
+    for (auto token : tokens)
     {
         if (std::regex_match(token, base_match, rgx))
         {
@@ -82,7 +65,12 @@ Expression Parser::toExpression(std::string expr)
     return result;
 }
 
-Expression Parser::combine(const Expression& lhs, const Expression& rhs)
+ExpressionCombiner::ExpressionCombiner(const Expression& lhs, const Expression& rhs)
+    : _lhs{lhs}, _rhs{rhs}
+{
+}
+
+Expression ExpressionCombiner::combine()
 {
     std::unordered_map<double, Term> degreeToTerm;
     auto update = [&degreeToTerm](Term term, double multiplier=1.0) {
@@ -95,11 +83,11 @@ Expression Parser::combine(const Expression& lhs, const Expression& rhs)
         }
     };
 
-    for (auto term : lhs) {
+    for (auto term : _lhs) {
         update(term);
     }
 
-    for (auto term : rhs) {
+    for (auto term : _rhs) {
         update(term, -1);
     }
 
@@ -112,4 +100,36 @@ Expression Parser::combine(const Expression& lhs, const Expression& rhs)
               [](const Term& a, const Term& b){ return a.degree < b.degree; });
 
     return Expression{std::move(result)};
+}
+
+ExpressionSplitter::ExpressionSplitter(std::string exprStr)
+        : _exprStr(std::move(exprStr))
+{
+}
+
+std::tuple<Expression, Expression> ExpressionSplitter::split()
+{
+    auto it = std::find_if(_exprStr.begin(), _exprStr.end(), [](char ch){ return ch == '='; });
+    if (it == _exprStr.end()) {
+        throw InvalidExpression(std::move(_exprStr));
+    }
+
+    auto lhs = ExpressionParser{std::string{_exprStr.begin(), it}}.parse();
+    auto rhs = ExpressionParser{std::string{it + 1, _exprStr.end()}}.parse();
+    return {lhs, rhs};
+}
+
+FormulaParser::FormulaParser(std::string formulaStr)
+        : _formulaStr(std::move(formulaStr))
+{
+}
+
+Expression FormulaParser::parse()
+{
+    auto& frml = _formulaStr;
+    removeWhitespaces(frml);
+
+    auto splitter = ExpressionSplitter{std::move(_formulaStr)};
+    auto [lhs, rhs] = splitter.split();
+    return ExpressionCombiner{lhs, rhs}.combine();
 }

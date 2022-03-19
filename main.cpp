@@ -13,7 +13,7 @@ int main(int argc, char **argv)
         return 1;
     }
     try {
-        auto expression = Parser::parse(argv[1]);
+        auto expression = FormulaParser{argv[1]}.parse();
         ExpressionPresenter::present(expression);
 
         auto solution = Solver::solve(std::move(expression));
