@@ -1,8 +1,11 @@
 #include "Parser.hpp"
 #include "Exceptions.hpp"
+#include "SequenceSplitter.hpp"
 
 #include <regex>
 #include <unordered_map>
+
+using namespace Utils;
 
 static const char* termPattern = "([-+]{0,1}0{1}|[-+]{0,1}[0-9]+|[-+]{0,1}[0-9]+\\.[0-9]+)\\*X\\^(0{1}|[1-9]+)";
 
@@ -14,13 +17,17 @@ Expression Parser::parse(std::string exprStr)
     if (eq == exprStr.end()) {
         throw InvalidExpression(std::move(exprStr));
     }
+
     auto lhsStr = std::string{exprStr.begin(), eq};
-    auto rhsStr = std::string{eq+1, exprStr.end()};
-    if (lhsStr.empty() || rhsStr.empty()) {
+    if (lhsStr.empty()) {
         throw InvalidExpression(std::move(exprStr));
     }
-
     auto lhs = toExpression(std::move(lhsStr));
+
+    auto rhsStr = std::string{eq+1, exprStr.end()};
+    if (rhsStr.empty()) {
+        throw InvalidExpression(std::move(exprStr));
+    }
     auto rhs = toExpression(std::move(rhsStr));
 
     return combine(lhs, rhs);
@@ -40,31 +47,22 @@ void Parser::removeWhitespaces(std::string& str)
                              }), str.end());
 }
 
-Tokens Parser::toTokens(std::string expr)
-{
-    Tokens result;
-    do {
-        auto op = std::find_if(expr.begin()+1, expr.end(), [](char ch){ return ch == '-' || ch == '+'; });
-        result.emplace_back(std::string{expr.begin(), op});
-
-        expr.erase(expr.begin(), op);
-    } while (!expr.empty());
-
-    return result;
-}
-
 Expression Parser::toExpression(std::string expr)
 {
     Expression result;
     std::smatch base_match;
     std::regex rgx{termPattern};
-    const auto& tokens = toTokens(std::move(expr));
-    for (auto str : tokens) {
-        if (std::regex_match(str, base_match, rgx)) {
+    SequenceSplitter splitter{std::move(expr),
+                              [](char ch){return ch == '-' || ch == '+'; }};
+    for (auto token : splitter.split())
+    {
+        if (std::regex_match(token, base_match, rgx))
+        {
             Term term;
             bool hasCoef{false};
             bool hasDegree{false};
-            for (size_t i = 1; i < base_match.size(); ++i) {
+            for (size_t i = 1; i < base_match.size(); ++i)
+            {
                 auto tkn = base_match[i].str();
                 if (!hasCoef) {
                     hasCoef=true;
@@ -78,7 +76,7 @@ Expression Parser::toExpression(std::string expr)
             result.push_back(term);
         }
         else {
-            throw InvalidTerm(std::move(str));
+            throw InvalidTerm(std::move(token));
         }
     }
     return result;

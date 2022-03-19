@@ -14,7 +14,7 @@ SRC = src/main.cpp \
 	  src/ExpressionPresenter.cpp \
 	  src/SolutionPresenter.cpp
 
-INC = -I inc
+INC = -I inc -I Utils
 
 HEADER_DEPS = inc/Expression.hpp \
  			  inc/Solution.hpp \
@@ -22,7 +22,8 @@ HEADER_DEPS = inc/Expression.hpp \
  			  inc/Solver.hpp \
  			  inc/Exceptions.hpp \
  			  inc/ExpressionPresenter.hpp \
- 			  inc/SolutionPresenter.hpp
+ 			  inc/SolutionPresenter.hpp \
+ 			  Utils/SequenceSplitter.hpp
 
 CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
 OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))
