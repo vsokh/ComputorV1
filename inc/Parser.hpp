@@ -31,18 +31,3 @@ public:
 private:
     std::string _exprStr;
 };
-
-class FormulaParser {
-public:
-    explicit FormulaParser(std::string formulaStr);
-    Expression parse();
-
-private:
-    std::string _formulaStr;
-};
-
-// FormulaParser
-// ExpressoinParser
-// ExpressoinSplitter
-// ExpressoinCombiner
-// TermParser

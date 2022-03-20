@@ -1,4 +1,4 @@
-#include "Parser.hpp"
+#include "FormulaParser.hpp"
 #include "Solver.hpp"
 
 #include "ExpressionPresenter.hpp"
@@ -13,10 +13,10 @@ int main(int argc, char **argv)
         return 1;
     }
     try {
-        auto expression = FormulaParser{argv[1]}.parse();
-        ExpressionPresenter::present(expression);
+        auto polynomial = FormulaToStandardFormPolynomialParser::parse(argv[1]);
+        ExpressionPresenter::present(polynomial);
 
-        auto solution = Solver::solve(std::move(expression));
+        auto solution = Solver::solve(std::move(polynomial));
         SolutionPresenter::present(std::move(solution));
     } catch (std::exception& e) {
         std::cout << e.what() << std::endl;

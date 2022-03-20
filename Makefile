@@ -12,9 +12,11 @@ SRC = src/main.cpp \
 	  src/Solver.cpp \
 	  src/Exceptions.cpp \
 	  src/ExpressionPresenter.cpp \
-	  src/SolutionPresenter.cpp
+	  src/SolutionPresenter.cpp \
+	  Parser/FormulaParser.cpp \
+	  Parser/ExpressionParser.cpp
 
-INC = -I inc -I Utils
+INC = -I inc -I Parser
 
 HEADER_DEPS = inc/Expression.hpp \
  			  inc/Solution.hpp \
@@ -23,7 +25,8 @@ HEADER_DEPS = inc/Expression.hpp \
  			  inc/Exceptions.hpp \
  			  inc/ExpressionPresenter.hpp \
  			  inc/SolutionPresenter.hpp \
- 			  Utils/SequenceUtils.hpp
+			  Parser/FormulaParser.hpp \
+			  Parser/ExpressionParser.hpp
 
 CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
 OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))
