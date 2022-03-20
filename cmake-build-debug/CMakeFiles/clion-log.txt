@@ -1,1 +1,0 @@
-CMakeLists.txt not found in /Users/vsokh/Dev/Projects/ComputorV1 Select CMakeLists.txt

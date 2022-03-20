@@ -1,5 +1,4 @@
 NAME = computor
-CPP_TEST = cpp_test
 
 CC = g++
 CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
@@ -7,26 +6,24 @@ CFLAGS = -Wall -Wextra -Werror -std=c++17 -O2 -g
 OBJDIR = obj
 TESTDIR = test
 
-SRC = src/main.cpp \
-	  src/Parser.cpp \
-	  src/Solver.cpp \
-	  src/Exceptions.cpp \
-	  src/ExpressionPresenter.cpp \
-	  src/SolutionPresenter.cpp \
+SRC = main.cpp \
+	  Solver/Solver.cpp \
+	  Utils/Exceptions.cpp \
+	  Presetner/ExpressionPresenter.cpp \
+	  Presenter/SolutionPresenter.cpp \
 	  Parser/FormulaParser.cpp \
 	  Parser/ExpressionParser.cpp
 
-INC = -I inc -I Parser
+INC = -I Parser -I Solver -I Presenter -I Utils -I Model
 
-HEADER_DEPS = inc/Expression.hpp \
- 			  inc/Solution.hpp \
- 			  inc/Parser.hpp \
- 			  inc/Solver.hpp \
- 			  inc/Exceptions.hpp \
- 			  inc/ExpressionPresenter.hpp \
- 			  inc/SolutionPresenter.hpp \
+HEADER_DEPS = Model/Expression.hpp \
+ 			  Model/Solution.hpp \
 			  Parser/FormulaParser.hpp \
-			  Parser/ExpressionParser.hpp
+			  Parser/ExpressionParser.hpp \
+ 			  Solver/Solver.hpp \
+ 			  Utils/Exceptions.hpp \
+ 			  Presenter/ExpressionPresenter.hpp \
+ 			  Presenter/SolutionPresenter.hpp
 
 CPP_DEPS = $(patsubst %.cpp, %.d, $(notdir $(SRC)))
 OBJ = $(patsubst %.cpp, $(OBJDIR)/%.o, $(notdir $(SRC)))
@@ -42,9 +39,6 @@ all: $(NAME)
 
 run: $(NAME)
 	./$(NAME)
-
-run_test: $(CPP_TEST)
-	./$(CPP_TEST)
 
 $(CPP_TEST): $(OBJ) $(HEADER_DEPS)
 	$(CC) $(CFLAGS) $(INC) -o $@ $(OBJ)

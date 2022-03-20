@@ -1,13 +1,13 @@
 #include <iostream>
 
-#include "Parser.hpp"
+#include "FormulaParser.hpp"
 #include "Exceptions.hpp"
 
 void test(std::string testName, std::string expr)
 {
     std::cout << testName << ": ";
     try {
-        Parser::parse(expr);
+        FormulaToStandardFormPolynomialParser::parse(expr);
     }
     catch (Exception& e) {
         std::cout << e.what() << std::endl;
